@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] Transform playerCamera = null;
-    [SerializeField] float mouseSensitivity = 80.0f;
-    [SerializeField] bool lockCursor = true;
-    [SerializeField][Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
-    [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
-
+    public Transform playerCamera = null;
+    public float mouseSensitivity = 80.0f;
+    public bool lockCursor = true;
+    [SerializeField] [Range(0.0f, 0.5f)] float moveSmoothTime = 0.3f;
+    [SerializeField] [Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
 
     public float speed = 1.0f;
     float cameraPitch = 0.0f;
@@ -18,7 +17,6 @@ public class PlayerController : MonoBehaviour
 
     Vector2 currentDir = Vector2.zero;
     Vector2 currentDirVelocity = Vector2.zero;
-
     Vector2 currentMouseDelta = Vector2.zero;
     Vector2 currentMouseDeltaVelocity = Vector2.zero;
 

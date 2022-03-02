@@ -4,88 +4,77 @@ using UnityEngine;
 
 public class HandController : MonoBehaviour
 {
-    public Transform joint_rotate;
-    public Transform joint_index_1;
-    public Transform joint_thumb_1;
+    public List<Transform> jointThumb;
+    public List<Transform> jointIndex;
+    public List<Transform> jointMiddle;
+    public List<Transform> jointRotate;
 
-    // Update is called once per frame
+    float wristRoll = 0f;
+    public float wristRotationSpeed = 30;
+
     void Start()
     {
-
+        
     }
     
     void Update()
     {
-        HandControls();
+        UpdateWristRoll();
+        UpdateFingers();
     }
 
-    void HandControls()
+    void UpdateWristRoll()
     {
-        var tilt_left = Input.GetKey(KeyCode.Q);
-        var tilt_right = Input.GetKey(KeyCode.E);
-        var close = Input.GetKey("mouse 0");
-        var open = Input.GetKey("mouse 1");
-        
-        if(tilt_left)
-        {
-            joint_rotate.localRotation *= Quaternion.Euler(1f, 0 , 0);
-        }
-        
-        if(tilt_right)
-        {
-            joint_rotate.localRotation *= Quaternion.Euler(-1f, 0 , 0);
-        }
+        bool tilt_left = Input.GetKey(KeyCode.Q);
+        bool tilt_right = Input.GetKey(KeyCode.E);
 
-        if(close)
+        if (tilt_left)
+        {
+            wristRoll += wristRotationSpeed * Time.deltaTime;          
+        }
+        else if (tilt_right)
+        {
+            wristRoll -= wristRotationSpeed * Time.deltaTime;
+        }
+        
+        wristRoll = Mathf.Clamp(wristRoll, -30f, 40f);
+        
+        jointRotate[0].localEulerAngles = Vector3.right * wristRoll;
+        jointRotate[1].localEulerAngles = Vector3.right * wristRoll * 0.8f;
+        jointRotate[2].localEulerAngles = Vector3.right * wristRoll * 0.6f;
+
+    }
+
+    void UpdateFingers()
+    {
+        bool close = Input.GetKey("mouse 0");
+        bool open = Input.GetKey("mouse 1");
+
+        if (close)
         {
             // joint_index_1.localRotation *= Quaternion.Euler(0,0,0.1f);
-            joint_index_1.localRotation *= Quaternion.Euler(0,0,1f);
-            joint_thumb_1.localRotation *= Quaternion.Euler(0,0.5f,1f);
+            jointIndex[0].localRotation *= Quaternion.Euler(0, 0, 1f);
+            jointMiddle[0].localRotation *= Quaternion.Euler(0, 0, 1f);
+            jointThumb[0].localRotation *= Quaternion.Euler(0, 0, 1f);
         }
-
-        if(open)
+        else if (open)
         {
             // joint_index_1.localRotation *= Quaternion.Euler(0,0,0.1f);
-            joint_index_1.localRotation *= Quaternion.Euler(0,0,-1f);
-            joint_thumb_1.localRotation *= Quaternion.Euler(0,-(0.5f),-1f);
+            jointIndex[0].localRotation *= Quaternion.Euler(0, 0, -1f);
+            jointMiddle[0].localRotation *= Quaternion.Euler(0, 0, -1f);
+            jointThumb[0].localRotation *= Quaternion.Euler(0, 0, -1f);
         }
+
+        //Debug.Log("Index" + jointIndex[0].localEulerAngles);
+        //Debug.Log("Middle" + jointMiddle[0].localEulerAngles);
+        //Debug.Log("Thumb" + jointThumb[0].localEulerAngles);
     }
 }
 
 
+
+
 /* 
-Extra Information and Unused Variables
-
-// https://docs.unity3d.com/ScriptReference/Transform.Translate.html
-
-
-// Joint Movement
-    Closed position
-    thumb3_l = 4.401, -6.354, 330,599
-    index1_l = 0, 3.679, 54.845
-
-    Open position
-    thumb3_l = 14.853, -29.21, 119.948
-    index1_l = 0, 3.679, 33.757
-
-// Joint Variables
-    public Transform joint_index_2;
-    public Transform joint_index_3;
-
-    public Transform joint_middle_1;
-    public Transform joint_middle_2;
-    public Transform joint_middle_3;
-    
-    public Transform joint_ring_1;
-    public Transform joint_ring_2;
-    public Transform joint_ring_3;
-
-    public Transform joint_pinky_1;
-    public Transform joint_pinky_2;
-    public Transform joint_pinky_3;
-    // public Transform joint_pinky_4;
-
-    public Transform joint_thumb_2;
-    public Transform joint_thumb_3;
-
+    Extra Information
+    https://docs.unity3d.com/ScriptReference/Transform.Translate.html
 */
